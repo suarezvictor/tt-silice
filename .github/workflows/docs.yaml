@@ -1,0 +1,31 @@
+name: docs
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Silice
+        uses: sylefeb/silice-for-github@v1.1
+
+      - name: Build project
+        shell: bash
+        working-directory: ./src/silice
+        run : |
+          make tinytapeout
+
+      - name: Cleanup
+        shell: bash
+        run : |
+          sudo rm -rf /usr/local/share/silice
+
+      - name: Build docs
+        uses: TinyTapeout/tt-gds-action/docs@tt09
