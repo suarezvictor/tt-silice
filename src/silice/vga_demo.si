@@ -10,7 +10,7 @@ $include('../common/vga.si')
 
 $include('shader.si')
 
-algorithm vga_demo(
+unit vga_demo(
   output! uint2 video_r,
   output! uint2 video_g,
   output! uint2 video_b,

@@ -1,4 +1,4 @@
-algorithm shader(
+unit shader(
   input uint10 x,
   input uint10 y,
   output uint8 r,
