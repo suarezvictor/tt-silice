@@ -204,9 +204,6 @@ in_y,
 out_r,
 out_g,
 out_b,
-in_run,
-out_done,
-reset,
 out_clock,
 clock
 );
@@ -215,24 +212,21 @@ input  [9:0] in_y;
 output  [7:0] out_r;
 output  [7:0] out_g;
 output  [7:0] out_b;
-input in_run;
-output out_done;
-input reset;
 output out_clock;
 input clock;
 wire __unused_x = &{1'b0,in_x};
 wire __unused_y = &{1'b0,in_y};
 assign out_clock = clock;
-reg  [7:0] _t_r;
-reg  [7:0] _t_g;
-reg  [7:0] _t_b;
 
-reg  [0:0] _d__idx_fsm0,_q__idx_fsm0;
-assign out_r = _t_r;
-assign out_g = _t_g;
-assign out_b = _t_b;
-assign out_done = (_q__idx_fsm0 == 0)
-;
+reg  [7:0] _d_r;
+reg  [7:0] _q_r;
+reg  [7:0] _d_g;
+reg  [7:0] _q_g;
+reg  [7:0] _d_b;
+reg  [7:0] _q_b;
+assign out_r = _q_r;
+assign out_g = _q_g;
+assign out_b = _q_b;
 
 
 
@@ -240,41 +234,28 @@ assign out_done = (_q__idx_fsm0 == 0)
 initial begin
 assume(reset);
 end
-assume property($initstate || (in_run || out_done));
 `endif
 always @* begin
-_d__idx_fsm0 = _q__idx_fsm0;
-_t_r = 0;
-_t_g = 0;
-_t_b = 0;
+_d_r = _q_r;
+_d_g = _q_g;
+_d_b = _q_b;
 // _always_pre
-(* full_case *)
-case (_q__idx_fsm0)
-1: begin
-// _top
-_t_r = in_x;
+// __block_1
+_d_r = in_x;
 
-_t_g = in_y;
+_d_g = in_y;
 
-_t_b = in_x^in_y;
+_d_b = in_x+in_y;
 
-_d__idx_fsm0 = 0;
-end
-0: begin 
-end
-default: begin 
-_d__idx_fsm0 = {1{1'bx}};
-`ifdef FORMAL
-assume(0);
-`endif
- end
-endcase
+// __block_2
 // _always_post
 // pipeline stage triggers
 end
 
 always @(posedge clock) begin
-_q__idx_fsm0 <= reset ? 0 : ( ~in_run ? 1 : _d__idx_fsm0);
+_q_r <= _d_r;
+_q_g <= _d_g;
+_q_b <= _d_b;
 end
 
 endmodule
@@ -310,12 +291,13 @@ wire  [7:0] _w_shader_r;
 wire  [7:0] _w_shader_g;
 wire  [7:0] _w_shader_b;
 wire __unused__shader = &{_w_shader_r,_w_shader_g,_w_shader_b,1'b0};
-wire _w_shader_done;
+reg  [1:0] _t_video_r;
+reg  [1:0] _t_video_g;
+reg  [1:0] _t_video_b;
 
-reg  _shader_run = 0;
-assign out_video_r = _w_shader_r;
-assign out_video_g = _w_shader_g;
-assign out_video_b = _w_shader_b;
+assign out_video_r = _t_video_r;
+assign out_video_g = _t_video_g;
+assign out_video_b = _t_video_b;
 assign out_video_hs = _w_vga_vga_hs;
 assign out_video_vs = _w_vga_vga_vs;
 M_vga_M_main_demo_vga vga (
@@ -334,9 +316,6 @@ M_shader_M_main_demo_shader shader (
 .out_r(_w_shader_r),
 .out_g(_w_shader_g),
 .out_b(_w_shader_b),
-.out_done(_w_shader_done),
-.in_run(_shader_run),
-.reset(reset),
 .clock(clock),.out_clock()
 );
 
@@ -348,8 +327,15 @@ assume(reset);
 end
 `endif
 always @* begin
-_shader_run = 1;
 // _always_pre
+// __block_1
+_t_video_r = _w_vga_active ? _w_shader_r[6+:2]:2'b0;
+
+_t_video_g = _w_vga_active ? _w_shader_g[6+:2]:2'b0;
+
+_t_video_b = _w_vga_active ? _w_shader_b[6+:2]:2'b0;
+
+// __block_2
 // _always_post
 // pipeline stage triggers
 end
