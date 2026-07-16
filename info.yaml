@@ -1,17 +1,17 @@
 # Tiny Tapeout project information
 project:
-  title:        "Example Silice project"      # Project title
-  author:       "your name"      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "project description"      # One line description of what your project does
-  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
+  title:        "Sample graphics"      # Project title
+  author:       "Victor Suarez Rovere"      # Your name
+  discord:      "suarezvictor77"      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  description:  "Basic graphics test"      # One line description of what your project does
+  language:     "Silice" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     25000000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
 
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_projectname"
+  top_module:  "tt_um_samplegraphics"
 
   # List your project's source files here.
   # Source files must be in ./src and you must list each source file separately, one per line.
