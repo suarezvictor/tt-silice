@@ -1,0 +1,17 @@
+algorithm shader(
+  input uint10 x,
+  input uint10 y,
+  output uint8 r,
+  output uint8 g,
+  output uint8 b,
+) {
+
+  always
+  {
+    r = x;
+    g = y;
+    b = x+y;
+  }
+}
+
+

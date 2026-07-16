@@ -8,7 +8,9 @@ $include('../common/vga.si')
 
 // -------------------------
 
-unit vga_demo(
+$include('shader.si')
+
+algorithm vga_demo(
   output! uint2 video_r,
   output! uint2 video_g,
   output! uint2 video_b,
@@ -16,17 +18,28 @@ unit vga_demo(
   output  uint1 video_vs,
 ) {
 
+  uint8 r = uninitialized;
+  uint8 g = uninitialized;
+  uint8 b = uninitialized;
+
   vga vga(
     vga_hs :> video_hs,
     vga_vs :> video_vs,
   );
 
-  always {
+  shader shader(
+    x <: vga.vga_x,
+    y <: vga.vga_y,
+    r :> r,
+    g :> g,
+    b :> b,
+  );
 
-    video_r = vga.active ? vga.vga_x[0,2] : 2b0;
-    video_g = vga.active ? vga.vga_y[0,2] : 2b0;
-    video_b = 2b0;
-
+  always
+  {
+    video_r = vga.active ? r[6,2] : 2b0;
+    video_g = vga.active ? g[6,2] : 2b0;
+    video_b = vga.active ? b[6,2] : 2b0;
   }
 
 }
